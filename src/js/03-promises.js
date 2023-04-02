@@ -43,7 +43,7 @@ form.addEventListener('submit', e => {
 .catch(({ position, delay}) => {
   Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
 });
-if  ((position += 1) > amount ) {
+if  (++position > amount ) {
   clearInterval(interval);
 form.reset();
 }

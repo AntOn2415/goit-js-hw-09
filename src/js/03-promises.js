@@ -1,32 +1,49 @@
 import Notiflix from 'notiflix';
 
-// при цій події викликати функцію createPromise та повязати з name="delay", name="step", name="amount" 
+// посилання
 const form = document.querySelector('.form');
-const inputDelaytEl = document.querySelector( ".form input[name=delay]");
-const inputSteptEl = document.querySelector( ".form input[name=step]");
-const inputAmountEl = document.querySelector( ".form input[name=amount]");
-const btnEl = document.querySelector(".form button");
 
-
-// form.addEventListener('submit', createPromise);
-
-btnEl.addEventListener('click', createPromise);
-
+// промисификация функції
 function createPromise(position, delay) {
   const shouldResolve = Math.random() > 0.3;
-  if (shouldResolve) {
-    // Fulfill
-    Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
-  } else {
-    // Reject
-    Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
-  }
+
+  return new Promise((resolve, reject) => {
+      if (shouldResolve) {
+        // Fulfill
+        resolve({ position, delay });
+      } else {
+        // Reject
+        reject({ position, delay });
+      }
+  })
 }
 
-createPromise(2, 1500)
-  .then(({ position, delay }) => {
-    Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
-  })
-  .catch(({ position, delay }) => {
-    Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
-  });
+// дилегування події
+form.addEventListener('submit', e => {
+  e.preventDefault();
+// отримуемо посилання на імпути
+  const delayInput = form.elements.delay;
+  const stepInput = form.elements.step;
+  const amountInput = form.elements.amount;
+// отримуемо значення імпутів
+  const delay = parseInt(delayInput.value);
+  const step = parseInt(stepInput.value);
+  const amount = parseInt(amountInput.value);
+  
+    let position = 1;
+    // перша затримка
+    setTimeout(() =>{
+    // кількість визову функції
+    let interval = setInterval(() => {
+  createPromise(position, delay).then(({ position, delay }) => {
+  Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
+})
+.catch(({ position, delay }) => {
+  Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
+});
+if  ((position += 1) > amount) {
+  clearInterval(interval);
+}
+    }, step);
+  }, delay);  
+});

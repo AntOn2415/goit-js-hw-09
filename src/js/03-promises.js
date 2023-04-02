@@ -1,12 +1,14 @@
 import Notiflix from 'notiflix';
 
-// посилання
+// // посилання
 const form = document.querySelector('.form');
 
 // промисификация функції
 function createPromise(position, delay, delayStep) {
   const shouldResolve = Math.random() > 0.3;
+
  delay = delay + (position - 1) * delayStep;
+
   return new Promise((resolve, reject) => {
       if (shouldResolve) {
         // Fulfill
@@ -31,18 +33,17 @@ form.addEventListener('submit', e => {
   const amount = parseInt(amountInput.value);
   
     let position = 1;
+    let interval;
     // кількість визову функції
-    let interval = setInterval(() => {
- 
-  createPromise(position, delay, step).then(({ position, delay }) => {
+    interval = setInterval(() => {
+  createPromise(position, delay, step)
+  .then(({ position, delay }) => {
   Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
-
 })
 .catch(({ position, delay}) => {
   Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
-  
 });
-if  ((position += 1) >= amount ) {
+if  ((position += 1) > amount ) {
   clearInterval(interval);
 form.reset();
 }

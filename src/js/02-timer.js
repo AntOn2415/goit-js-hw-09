@@ -1,6 +1,5 @@
-
-import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.min.css";
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 // import "notiflix/dist/notiflix-3.2.6.min.css"
 
@@ -34,7 +33,7 @@ const styles = `
   }
 </style>`;
 
-timerEl.insertAdjacentHTML("beforebegin", styles);
+timerEl.insertAdjacentHTML('beforebegin', styles);
 
 const options = {
   enableTime: true,
@@ -45,7 +44,10 @@ const options = {
     console.log(selectedDates[0]);
     const selectedDateInMilliseconds = selectedDates[0].getTime();
     const currentDate = options.defaultDate.getTime();
-    const remainingTime = countsRemainingTime(selectedDateInMilliseconds, currentDate);
+    const remainingTime = countsRemainingTime(
+      selectedDateInMilliseconds,
+      currentDate
+    );
     if (remainingTime < 0) {
       btnStartEl.setAttribute('disabled', true);
       Notiflix.Notify.failure('Please choose a date in the future');
@@ -53,19 +55,16 @@ const options = {
       btnStartEl.removeAttribute('disabled');
       timer.remainingTime = remainingTime;
     }
-
   },
-};  
+};
 
-flatpickr("#datetime-picker", options, {
-});
+flatpickr('#datetime-picker', options, {});
 
 function addLeadingZero(value) {
   return String(value).padStart(2, '0');
 }
 
 function convertMs(ms) {
-
   // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
@@ -79,26 +78,28 @@ function convertMs(ms) {
   // Remaining minutes
   const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
   // Remaining seconds
-  const seconds = addLeadingZero(Math.floor((((ms % day) % hour) % minute) / second));
+  const seconds = addLeadingZero(
+    Math.floor((((ms % day) % hour) % minute) / second)
+  );
 
   return { days, hours, minutes, seconds };
 }
 function countsRemainingTime(selectedTime, currentTime) {
   return selectedTime - currentTime;
-};
+}
 
 class Timer {
-  constructor({onTick, remainingTime}) {
+  constructor({ onTick, remainingTime }) {
     this.interval = null;
     this.isActive = false;
     this.onTick = onTick;
     this.remainingTime = remainingTime;
   }
-  
+
   start() {
-    if(this.isActive) {
+    if (this.isActive) {
       return;
-    };
+    }
     this.isActive = true;
     this.interval = setInterval(() => {
       const deltaTime = this.remainingTime;
@@ -117,7 +118,7 @@ class Timer {
     this.isActive = false;
     this.remainingTime = 0;
   }
-};
+}
 
 btnStartEl.addEventListener('click', () => {
   timer.start();
@@ -125,7 +126,7 @@ btnStartEl.addEventListener('click', () => {
 
 const timer = new Timer({
   onTick: upDateTimer,
-  remainingTime: 0
+  remainingTime: 0,
 });
 
 function upDateTimer({ days, hours, minutes, seconds }) {
@@ -133,5 +134,4 @@ function upDateTimer({ days, hours, minutes, seconds }) {
   hoursSpanEl.textContent = `${hours}`;
   minutesSpanEl.textContent = `${minutes}`;
   secondsSpanEl.textContent = `${seconds}`;
-};
-
+}

@@ -40,11 +40,11 @@ function onFormSubmit(e) {
         Notiflix.Notify.failure(
           `❌ Rejected promise ${position} in ${delay}ms`
         );
-        
+
       });
     delay += step;
   }
-  form.reset();
+  form.reset()
     }
 
 // ________робочий варіант але тільки не на гітхабі
